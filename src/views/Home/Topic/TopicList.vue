@@ -231,14 +231,10 @@ const saveTopics = () => {
   localStorage.setItem("topics", JSON.stringify(topics.value));
 };
 
-const stopWatch = watch(topics, saveTopics, { deep: true });
+watch(topics, saveTopics, { deep: true });
 
 onMounted(() => {
   topics.value = loadTopics();
-});
-
-onUnmounted(() => {
-  stopWatch();
 });
 
 const showViewDialog = ref(false);

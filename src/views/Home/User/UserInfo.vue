@@ -76,14 +76,10 @@ const saveUserInfo = () => {
 const isEditing = ref(false);
 const userInfo = ref(loadUserInfo());
 
-const stopWatch = watch(userInfo, saveUserInfo, { deep: true });
+watch(userInfo, saveUserInfo, { deep: true });
 
 onMounted(() => {
   userInfo.value = loadUserInfo();
-});
-
-onUnmounted(() => {
-  stopWatch();
 });
 
 function startEdit() {
