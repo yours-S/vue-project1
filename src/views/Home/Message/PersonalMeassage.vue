@@ -88,7 +88,7 @@ const loadMessages = () => {
       ];
 };
 
-let messages = ref(loadMessages());
+const messages = ref(loadMessages());
 
 // 保存消息到本地存储
 const saveMessages = () => {

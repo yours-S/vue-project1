@@ -74,7 +74,7 @@ const saveUserInfo = () => {
 };
 
 const isEditing = ref(false);
-let userInfo = ref(loadUserInfo());
+const userInfo = ref(loadUserInfo());
 
 const stopWatch = watch(userInfo, saveUserInfo, { deep: true });
 

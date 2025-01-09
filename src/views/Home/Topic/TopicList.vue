@@ -168,8 +168,8 @@
 <script setup lang="ts" name="TopicList">
 import { ref, onMounted, onUnmounted, watch } from "vue";
 
-let showAddDialog = ref(false);
-let newTopic = ref({
+const showAddDialog = ref(false);
+const newTopic = ref({
   name: "",
   major: "",
   teacher: "",
@@ -225,7 +225,7 @@ const loadTopics = () => {
         },
       ];
 };
-let topics = ref(loadTopics());
+const topics = ref(loadTopics());
 
 const saveTopics = () => {
   localStorage.setItem("topics", JSON.stringify(topics.value));
@@ -241,27 +241,27 @@ onUnmounted(() => {
   stopWatch();
 });
 
-let showViewDialog = ref(false);
-let currentTopic = ref({
+const showViewDialog = ref(false);
+const currentTopic = ref({
   name: "",
   major: "",
   teacher: "",
 });
 
-let showEditDialog = ref(false);
-let editingTopic = ref({
+const showEditDialog = ref(false);
+const editingTopic = ref({
   name: "",
   major: "",
   teacher: "",
 });
-let editingIndex = ref(-1);
+const editingIndex = ref(-1);
 
 function handleView(topic: any) {
   currentTopic.value = { ...topic };
   showViewDialog.value = true;
 }
 function handleDelete(topic: any) {
-  let index = topics.value.indexOf(topic);
+  const index = topics.value.indexOf(topic);
   topics.value.splice(index, 1);
 }
 
