@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts" name="UserInfo">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 
 const loadUserInfo = () => {
   const storedInfo = localStorage.getItem("userInfo");
@@ -76,10 +76,14 @@ const saveUserInfo = () => {
 const isEditing = ref(false);
 let userInfo = ref(loadUserInfo());
 
-watch(userInfo, saveUserInfo, { deep: true });
+const stopWatch = watch(userInfo, saveUserInfo, { deep: true });
 
 onMounted(() => {
   userInfo.value = loadUserInfo();
+});
+
+onUnmounted(() => {
+  stopWatch();
 });
 
 function startEdit() {

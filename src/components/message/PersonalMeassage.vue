@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts" name="PersonalMeassage">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 
 // 从本地存储获取消息数据
 const loadMessages = () => {
@@ -96,11 +96,16 @@ const saveMessages = () => {
 };
 
 // 监听messages变化并保存
-watch(messages, saveMessages, { deep: true });
+const stopWatch = watch(messages, saveMessages, { deep: true });
 
 // 组件挂载时加载数据
 onMounted(() => {
   messages.value = loadMessages();
+});
+
+// 组件卸载时停止监听
+onUnmounted(() => {
+  stopWatch();
 });
 
 function markAsRead(index: number) {

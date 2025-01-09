@@ -166,7 +166,7 @@
 </template>
 
 <script setup lang="ts" name="TopicList">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 
 let showAddDialog = ref(false);
 let newTopic = ref({
@@ -231,10 +231,14 @@ const saveTopics = () => {
   localStorage.setItem("topics", JSON.stringify(topics.value));
 };
 
-watch(topics, saveTopics, { deep: true });
+const stopWatch = watch(topics, saveTopics, { deep: true });
 
 onMounted(() => {
   topics.value = loadTopics();
+});
+
+onUnmounted(() => {
+  stopWatch();
 });
 
 let showViewDialog = ref(false);
