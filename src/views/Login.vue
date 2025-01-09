@@ -24,7 +24,7 @@
           <van-button round block type="primary" native-type="submit">
             登录
           </van-button>
-          <van-button
+          <!-- <van-button
             round
             block
             type="default"
@@ -32,7 +32,7 @@
             class="register-btn"
           >
             注册账号
-          </van-button>
+          </van-button> -->
         </div>
       </van-form>
     </div>
@@ -54,9 +54,9 @@ function onSubmit(values: any) {
     alert("用户名或密码错误");
   }
 }
-function goToRegister() {
-  router.push("/register");
-}
+// function goToRegister() {
+//   router.push("/register");
+// }
 </script>
 
 <style scoped>
@@ -99,7 +99,7 @@ function goToRegister() {
   margin: 16px;
 }
 
-.register-btn {
+/* .register-btn {
   margin-top: 12px;
-}
+} */
 </style>
