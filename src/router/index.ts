@@ -20,22 +20,22 @@ const router = createRouter({
     {
       path: "/index",
       name: "index",
-      component: () => import("../views/Index.vue"),
+      component: () => import("../views/Home/Index.vue"),
       children: [
         {
           path: "personalmessage",
           name: "personalmessage",
-          component: () => import("../components/message/PersonalMeassage.vue"),
-        },
-        {
-          path: "userinfo",
-          name: "userinfo",
-          component: () => import("../components/user/UserInfo.vue"),
+          component: () => import("../views/Home/Message/PersonalMeassage.vue"),
         },
         {
           path: "topiclist",
           name: "topiclist",
-          component: () => import("../components/topic/TopicList.vue"),
+          component: () => import("../views/Home/Topic/TopicList.vue"),
+        },
+        {
+          path: "userinfo",
+          name: "userinfo",
+          component: () => import("../views/Home/User/UserInfo.vue"),
         },
       ],
     },

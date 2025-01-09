@@ -62,13 +62,13 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 
-let router = useRouter();
+const router = useRouter();
 
 function logout() {
   router.push("/login");
 }
 
-let menuItems = reactive([
+const menuItems = reactive([
   {
     title: "消息管理",
     icon: "chat-o",
@@ -86,14 +86,14 @@ let menuItems = reactive([
   },
 ]);
 
-let activeIndex = ref(-1);
+const activeIndex = ref(-1);
 
 function toggleSubmenu(index: number) {
   activeIndex.value = activeIndex.value === index ? -1 : index;
   activeSubItem.value = "";
 }
 
-let activeSubItem = ref("");
+const activeSubItem = ref("");
 
 function handleSubmenuClick(subItem: any) {
   activeSubItem.value = subItem.title;

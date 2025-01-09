@@ -43,9 +43,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-let router = useRouter();
-let username = ref("");
-let password = ref("");
+const router = useRouter();
+const username = ref("");
+const password = ref("");
 
 function onSubmit(values: any) {
   if (values.username === "admin" && values.password === "123456") {

@@ -26,7 +26,7 @@
             :rules="[
               { required: true, message: '请填写密码' },
               {
-                validator: (val) => val.length >= 6,
+                validator: (val: any) => val.length >= 6,
                 message: '密码不能少于6位',
               },
             ]"
