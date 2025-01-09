@@ -46,16 +46,17 @@ import { useRouter } from "vue-router";
 let router = useRouter();
 let username = ref("");
 let password = ref("");
-let onSubmit = (values: any) => {
+
+function onSubmit(values: any) {
   if (values.username === "admin" && values.password === "123456") {
     router.push("/index");
   } else {
     alert("用户名或密码错误");
   }
-};
-let goToRegister = () => {
+}
+function goToRegister() {
   router.push("/register");
-};
+}
 </script>
 
 <style scoped>

@@ -55,7 +55,6 @@
 <script setup lang="ts" name="UserInfo">
 import { ref, onMounted, watch } from "vue";
 
-// 从本地存储加载用户信息
 const loadUserInfo = () => {
   const storedInfo = localStorage.getItem("userInfo");
   return storedInfo
@@ -70,7 +69,6 @@ const loadUserInfo = () => {
       };
 };
 
-// 保存用户信息到本地存储
 const saveUserInfo = () => {
   localStorage.setItem("userInfo", JSON.stringify(userInfo.value));
 };
@@ -78,10 +76,8 @@ const saveUserInfo = () => {
 const isEditing = ref(false);
 let userInfo = ref(loadUserInfo());
 
-// 监听用户信息变化并保存
 watch(userInfo, saveUserInfo, { deep: true });
 
-// 组件挂载时加载数据
 onMounted(() => {
   userInfo.value = loadUserInfo();
 });

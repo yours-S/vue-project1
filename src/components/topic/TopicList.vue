@@ -203,7 +203,6 @@ function resetForm() {
   };
 }
 
-// 从本地存储加载用户信息
 const loadTopics = () => {
   const storedTopics = localStorage.getItem("topics");
   return storedTopics
@@ -237,23 +236,7 @@ watch(topics, saveTopics, { deep: true });
 onMounted(() => {
   topics.value = loadTopics();
 });
-// let topics = ref([
-//   {
-//     name: "英语课题",
-//     major: "英语专业",
-//     teacher: "张三",
-//   },
-//   {
-//     name: "语文课题",
-//     major: "语文专业",
-//     teacher: "李四",
-//   },
-//   {
-//     name: "数学课题",
-//     major: "数学专业",
-//     teacher: "王五",
-//   },
-// ]);
+
 let showViewDialog = ref(false);
 let currentTopic = ref({
   name: "",

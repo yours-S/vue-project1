@@ -67,10 +67,11 @@ let router = useRouter();
 let username = ref("");
 let password = ref("");
 let confirmPassword = ref("");
-let onSubmit = () => {};
-let goToLogin = () => {
+
+function onSubmit() {}
+function goToLogin() {
   router.push("/login");
-};
+}
 </script>
 
 <style scoped>

@@ -64,9 +64,9 @@ import { useRouter } from "vue-router";
 
 let router = useRouter();
 
-let logout = () => {
+function logout() {
   router.push("/login");
-};
+}
 
 let menuItems = reactive([
   {
@@ -88,14 +88,14 @@ let menuItems = reactive([
 
 let activeIndex = ref(-1);
 
-let toggleSubmenu = (index: number) => {
+function toggleSubmenu(index: number) {
   activeIndex.value = activeIndex.value === index ? -1 : index;
   activeSubItem.value = "";
-};
+}
 
 let activeSubItem = ref("");
 
-let handleSubmenuClick = (subItem: any) => {
+function handleSubmenuClick(subItem: any) {
   activeSubItem.value = subItem.title;
   // 只处理个人消息的路由跳转
   if (subItem.title === "个人消息") {
@@ -108,7 +108,7 @@ let handleSubmenuClick = (subItem: any) => {
     // 其他子菜单项不进行路由跳转
     router.push("/index");
   }
-};
+}
 </script>
 
 <style scoped>
