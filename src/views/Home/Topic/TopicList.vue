@@ -1,5 +1,6 @@
 <template>
   <div class="topic-list">
+    <!-- 头部区域，包含添加按钮 -->
     <div class="header">
       <van-button
         type="primary"
@@ -11,7 +12,9 @@
       </van-button>
     </div>
 
+    <!-- 课题列表容器 -->
     <div class="topics-container">
+      <!-- 遍历课题列表，显示每个课题 -->
       <van-cell-group
         inset
         v-for="topic in topics"
@@ -20,6 +23,7 @@
       >
         <div class="topic-content">
           <div class="topic-header">
+            <!-- 课题信息展示 -->
             <div class="topic-info">
               <div class="topic-row">
                 <span class="label">课题名称: </span>
@@ -34,6 +38,7 @@
                 <span class="value">{{ topic.teacher }}</span>
               </div>
             </div>
+            <!-- 操作按钮组 -->
             <div class="button-group">
               <van-button
                 type="primary"
@@ -94,7 +99,7 @@
       </van-form>
     </van-dialog>
 
-    <!-- 查看 -->
+    <!-- 查看课题详情弹窗 -->
     <van-dialog
       v-model:show="showViewDialog"
       title="课题详情"
@@ -131,7 +136,7 @@
       </div>
     </van-dialog>
 
-    <!-- 修改 -->
+    <!-- 修改课题弹窗 -->
     <van-dialog
       v-model:show="showEditDialog"
       title="修改课题"
@@ -168,14 +173,17 @@
 <script setup lang="ts" name="TopicList">
 import { ref, onMounted, onUnmounted, watch } from "vue";
 
-const showAddDialog = ref(false);
+// 添加课题相关状态
+const showAddDialog = ref(false); // 控制添加弹窗显示
 const newTopic = ref({
   name: "",
   major: "",
   teacher: "",
 });
 
+// 添加课题处理函数
 function handleAddTopic() {
+  // 验证表单是否填写完整
   if (
     !newTopic.value.name ||
     !newTopic.value.major ||
@@ -184,17 +192,21 @@ function handleAddTopic() {
     alert("请填写完整信息");
     return;
   }
+  // 添加新课题到列表
   topics.value.push({
     name: newTopic.value.name,
     major: newTopic.value.major,
     teacher: newTopic.value.teacher,
   });
+  // 重置表单
   newTopic.value = {
     name: "",
     major: "",
     teacher: "",
   };
 }
+
+// 重置表单函数
 function resetForm() {
   newTopic.value = {
     name: "",
@@ -203,6 +215,7 @@ function resetForm() {
   };
 }
 
+// 加载课题列表
 const loadTopics = () => {
   const storedTopics = localStorage.getItem("topics");
   return storedTopics
@@ -225,18 +238,24 @@ const loadTopics = () => {
         },
       ];
 };
+
+// 课题列表响应式数据
 const topics = ref(loadTopics());
 
+// 保存课题列表到本地存储
 const saveTopics = () => {
   localStorage.setItem("topics", JSON.stringify(topics.value));
 };
 
+// 监听课题列表变化，自动保存
 watch(topics, saveTopics, { deep: true });
 
+// 组件挂载时加载课题列表
 onMounted(() => {
   topics.value = loadTopics();
 });
 
+// 查看课题相关状态
 const showViewDialog = ref(false);
 const currentTopic = ref({
   name: "",
@@ -244,6 +263,7 @@ const currentTopic = ref({
   teacher: "",
 });
 
+// 编辑课题相关状态
 const showEditDialog = ref(false);
 const editingTopic = ref({
   name: "",
@@ -252,21 +272,26 @@ const editingTopic = ref({
 });
 const editingIndex = ref(-1);
 
+// 查看课题详情
 function handleView(topic: any) {
   currentTopic.value = { ...topic };
   showViewDialog.value = true;
 }
+
+// 删除课题
 function handleDelete(topic: any) {
   const index = topics.value.indexOf(topic);
   topics.value.splice(index, 1);
 }
 
+// 编辑课题
 function handleEdit(topic: any) {
   editingTopic.value = { ...topic };
   editingIndex.value = topics.value.indexOf(topic);
   showEditDialog.value = true;
 }
 
+// 确认编辑
 function confirmEdit() {
   if (editingIndex.value > -1) {
     topics.value[editingIndex.value] = { ...editingTopic.value };

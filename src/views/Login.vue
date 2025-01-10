@@ -1,9 +1,15 @@
 <template>
+  <!-- 登录页面容器 -->
   <div class="login-page">
+    <!-- 登录表单容器 -->
     <div class="login-container">
+      <!-- 登录标题 -->
       <h2 class="login-title">欢迎登录</h2>
+      <!-- 使用vant表单组件 -->
       <van-form @submit="onSubmit">
+        <!-- 表单字段组 -->
         <van-cell-group inset>
+          <!-- 用户名输入框 -->
           <van-field
             v-model="username"
             name="username"
@@ -11,6 +17,7 @@
             placeholder="请输入用户名"
             :rules="[{ required: true, message: '请填写用户名' }]"
           />
+          <!-- 密码输入框 -->
           <van-field
             v-model="password"
             type="password"
@@ -20,11 +27,14 @@
             :rules="[{ required: true, message: '请填写密码' }]"
           />
         </van-cell-group>
+        <!-- 按钮组 -->
         <div class="button-group">
+          <!-- 登录按钮 -->
           <van-button round block type="primary" native-type="submit">
             登录
           </van-button>
-          <!-- <van-button
+          <!-- 注册按钮 -->
+          <van-button
             round
             block
             type="default"
@@ -32,7 +42,7 @@
             class="register-btn"
           >
             注册账号
-          </van-button> -->
+          </van-button>
         </div>
       </van-form>
     </div>
@@ -40,23 +50,44 @@
 </template>
 
 <script setup lang="ts" name="Login">
+// 引入Vue相关依赖
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+// 获取路由实例
 const router = useRouter();
+// 定义响应式数据：用户名和密码
 const username = ref("");
 const password = ref("");
 
+// 表单提交处理函数
 function onSubmit(values: any) {
-  if (values.username === "admin" && values.password === "123456") {
+  // 从localStorage获取用户列表
+  const userList = JSON.parse(localStorage.getItem("userList") || "[]");
+
+  // 查找匹配的用户
+  const matchedUser = userList.find(
+    (user: any) =>
+      user.username === values.username && user.password === values.password
+  );
+
+  // 检查是否匹配到用户或管理员账号
+  if (
+    matchedUser ||
+    (values.username === "admin" && values.password === "123456")
+  ) {
+    // 登录成功，跳转到首页
     router.push("/index");
   } else {
+    // 登录失败，显示错误提示
     alert("用户名或密码错误");
   }
 }
-// function goToRegister() {
-//   router.push("/register");
-// }
+
+// 跳转到注册页面
+function goToRegister() {
+  router.push("/register");
+}
 </script>
 
 <style scoped>
@@ -99,7 +130,7 @@ function onSubmit(values: any) {
   margin: 16px;
 }
 
-/* .register-btn {
+.register-btn {
   margin-top: 12px;
-} */
+}
 </style>

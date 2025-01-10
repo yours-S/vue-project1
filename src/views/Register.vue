@@ -1,9 +1,15 @@
 <template>
+  <!-- 注册页面容器 -->
   <div class="register-page">
+    <!-- 注册表单容器 -->
     <div class="register-container">
+      <!-- 注册标题 -->
       <h2 class="register-title">用户注册</h2>
+      <!-- 使用vant表单组件 -->
       <van-form @submit="onSubmit">
+        <!-- 表单字段组 -->
         <van-cell-group inset>
+          <!-- 用户名输入框 -->
           <van-field
             v-model="username"
             name="username"
@@ -17,6 +23,7 @@
               },
             ]"
           />
+          <!-- 密码输入框 -->
           <van-field
             v-model="password"
             type="password"
@@ -31,6 +38,7 @@
               },
             ]"
           />
+          <!-- 确认密码输入框 -->
           <van-field
             v-model="confirmPassword"
             type="password"
@@ -40,10 +48,13 @@
             :rules="[{ required: true, message: '请确认密码' }]"
           />
         </van-cell-group>
+        <!-- 按钮组 -->
         <div class="button-group">
+          <!-- 注册按钮 -->
           <van-button round block type="primary" native-type="submit">
             注册
           </van-button>
+          <!-- 返回登录按钮 -->
           <van-button
             round
             block
@@ -60,15 +71,57 @@
 </template>
 
 <script setup lang="ts" name="Register">
+// 引入Vue相关依赖
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-let router = useRouter();
-let username = ref("");
-let password = ref("");
-let confirmPassword = ref("");
+// 获取路由实例
+const router = useRouter();
+// 定义响应式数据：用户名、密码和确认密码
+const username = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 
-function onSubmit() {}
+// 表单提交处理函数
+function onSubmit() {
+  // 验证两次输入的密码是否一致
+  if (password.value !== confirmPassword.value) {
+    alert("两次输入的密码不一致，请重新输入");
+    return;
+  }
+
+  // 获取已存储的用户列表
+  const userList = JSON.parse(localStorage.getItem("userList") || "[]");
+
+  // 检查用户名是否已存在
+  const isUserExist = userList.some(
+    (user: any) => user.username === username.value
+  );
+  if (isUserExist) {
+    alert("该用户名已被注册，请使用其他用户名");
+    return;
+  }
+
+  // 添加新用户
+  userList.push({
+    username: username.value,
+    password: password.value,
+  });
+
+  // 更新localStorage中的用户列表
+  localStorage.setItem("userList", JSON.stringify(userList));
+
+  // 注册成功后跳转到登录页面，并携带注册信息
+  router.push({
+    path: "/login",
+    query: {
+      username: username.value,
+      password: password.value,
+    },
+  });
+}
+
+// 跳转到登录页面
 function goToLogin() {
   router.push("/login");
 }
