@@ -5,6 +5,16 @@
     <div class="nav-bar">
       <!-- 系统标题 -->
       <div class="system-title">我的系统</div>
+      <!-- 搜索按钮 -->
+      <van-button
+        plain
+        type="primary"
+        size="small"
+        @click="handleSearch"
+        class="search-btn"
+      >
+        <van-icon name="search" />
+      </van-button>
       <!-- 退出登录按钮 -->
       <van-button
         plain
@@ -83,6 +93,11 @@ const router = useRouter();
 // 退出登录功能
 function logout() {
   router.push("/login");
+}
+
+// 搜索功能
+function handleSearch() {
+  router.push("/search");
 }
 
 // 菜单项数据
@@ -164,6 +179,18 @@ function handleSubmenuClick(subItem: any) {
 .system-title {
   font-size: 20px;
   font-weight: bold;
+}
+
+.search-btn {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto; /* 将搜索按钮移动到右侧 */
+  margin-right: 16px; /* 与右侧元素保持间距 */
 }
 
 .main-container {

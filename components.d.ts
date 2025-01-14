@@ -8,13 +8,16 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     HistoryMessage: typeof import('./src/components/message/HistoryMessage.vue')['default']
+    Index: typeof import('./src/components/Search/Index.vue')['default']
     PersonalMeassage: typeof import('./src/components/message/PersonalMeassage.vue')['default']
     PersonalMessage: typeof import('./src/components/message/PersonalMessage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBtn: typeof import('./src/components/Search/SearchBtn.vue')['default']
     TopicList: typeof import('./src/components/topic/TopicList.vue')['default']
     UserInfo: typeof import('./src/components/user/UserInfo.vue')['default']
     VanButton: typeof import('vant/es')['Button']
+    VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanCollapse: typeof import('vant/es')['Collapse']
     VanCollapseItem: typeof import('vant/es')['CollapseItem']
@@ -23,6 +26,7 @@ declare module 'vue' {
     VanField: typeof import('vant/es')['Field']
     VanForm: typeof import('vant/es')['Form']
     VanIcon: typeof import('vant/es')['Icon']
+    VanSearch: typeof import('vant/es')['Search']
     VanTag: typeof import('vant/es')['Tag']
   }
 }
