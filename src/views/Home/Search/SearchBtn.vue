@@ -17,9 +17,11 @@
     <!-- 搜索记录 -->
     <div class="search-history" v-if="searchHistory.length > 0">
       <hr />
-      <div class="history-title">搜索记录</div>
-      <div class="history-clear" @click="historyClear">
-        <van-icon name="delete" />
+      <div class="history-title-container">
+        <div class="history-title">搜索记录</div>
+        <div class="history-clear" @click="historyClear">
+          <van-icon name="delete" />
+        </div>
       </div>
       <div class="history-list">
         <div
@@ -248,7 +250,10 @@ watch(
   margin-top: 20px;
 }
 
-.history-title {
+.history-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -257,18 +262,18 @@ watch(
   background: #f5f5f5;
   z-index: 1;
   padding: 10px 0;
-  display: inline - block;
-  width: calc(100% - 40px);
+}
+
+.history-title {
+  display: inline-block;
 }
 
 .history-clear {
-  display: inline - block;
+  display: inline-block;
   font-size: 14px;
   color: #999;
   cursor: pointer;
-  margin-bottom: 10px;
   text-align: right;
-  width: 40px;
 }
 
 .history-clear:hover {
@@ -282,7 +287,7 @@ watch(
 }
 
 .history-item {
-  display: inline - block;
+  display: inline-block;
   padding: 4px 8px;
   background-color: #f0f0f0;
   border-radius: 4px;
@@ -308,7 +313,7 @@ watch(
 }
 
 .isExpand {
-  display: inline - block;
+  display: inline-block;
   padding: 4px 8px;
   background-color: #f0f0f0;
   border-radius: 4px;
