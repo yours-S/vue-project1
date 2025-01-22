@@ -47,7 +47,7 @@
       </div>
     </div>
     <div v-else>
-      当前没有历史记录
+      当前没有搜索记录
       <!-- 调试信息 -->
     </div>
   </div>
@@ -61,9 +61,7 @@ const searchHistory = ref<string[]>([]);
 const showAllHistory = ref(false);
 const historyItemRefs = ref<HTMLElement[]>([]);
 const maxHistoryHeight = ref<number | null>(null);
-// 显式声明为 number 或 null 类型
 let firstDiffOffsetTop: number | null = null;
-// 显式声明为 number 或 null 类型
 let firstOffsetTop: number | null = null;
 
 // 从本地存储中读取搜索历史记录
