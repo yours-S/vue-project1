@@ -58,7 +58,11 @@ const searchValue = ref("");
 const searchHistory = ref<string[]>([]);
 const showAllHistory = ref(false);
 const historyItemRefs = ref<HTMLElement[]>([]);
-const maxHistoryHeight = 214;
+const maxHistoryHeight = ref<number | null>(null);
+// 显式声明为 number 或 null 类型
+let firstDiffOffsetTop: number | null = null;
+// 显式声明为 number 或 null 类型
+let firstOffsetTop: number | null = null;
 
 // 从本地存储中读取搜索历史记录
 const loadSearchHistoryFromLocalStorage = () => {
@@ -79,27 +83,20 @@ const handleSearch = () => {
     searchHistory.value.unshift(searchValue.value);
     searchHistory.value = [...new Set(searchHistory.value)];
     searchValue.value = "";
-    // 确保在添加历史记录项后更新元素引用
     nextTick(() => {
-      console.log("Search history updated, recalculating refs...");
-      for (let i = 0; i < historyItemRefs.value.length; i++) {
-        const el = historyItemRefs.value[i];
-        if (el) {
-          console.log(`Item ${i} offsetTop: ${el.offsetTop}`);
-        }
-      }
+      updateMaxHistoryHeight();
+      saveSearchHistoryToLocalStorage();
     });
-    // 保持搜索历史记录到本地存储
-    saveSearchHistoryToLocalStorage();
   }
 };
 
 // 清除搜索历史记录
 const historyClear = () => {
   searchHistory.value = [];
-  // 清空历史记录项的引用
   historyItemRefs.value = [];
-  // 清除本地存储中的搜索历史记录
+  maxHistoryHeight.value = null;
+  firstDiffOffsetTop = null;
+  firstOffsetTop = null;
   localStorage.removeItem("searchHistory");
 };
 
@@ -111,17 +108,11 @@ const handleHistoryClick = (item: string) => {
 // 移除历史记录项
 const removeHistory = (index: number) => {
   searchHistory.value.splice(index, 1);
-  // 移除对应的历史记录项的引用
   historyItemRefs.value.splice(index, 1);
-  // 重新计算 shouldShowExpandButton 的值
   nextTick(() => {
-    // 触发 shouldShowExpandButton 的重新计算
-    console.log(
-      "Recalculating shouldShowExpandButton after removing history item"
-    );
+    updateMaxHistoryHeight();
+    saveSearchHistoryToLocalStorage();
   });
-  // 更新本地存储
-  saveSearchHistoryToLocalStorage();
 };
 
 // 设置历史记录项的元素引用
@@ -133,26 +124,23 @@ const setHistoryItemRef = (el: HTMLElement | any, index: number) => {
 
 // 计算是否需要显示展开/收起按钮
 const shouldShowExpandButton = computed(() => {
-  let hasExceeded = false;
+  if (!maxHistoryHeight.value) return false;
   if (!showAllHistory.value) {
     for (let i = 0; i < historyItemRefs.value.length; i++) {
       const el = historyItemRefs.value[i];
-      if (el && el.offsetTop > maxHistoryHeight) {
-        hasExceeded = true;
-        break;
+      if (el && el.offsetTop > maxHistoryHeight.value) {
+        return true;
       }
     }
   } else {
-    // 当展开时，检查是否还有元素超过 maxHistoryHeight
     for (let i = 0; i < historyItemRefs.value.length; i++) {
       const el = historyItemRefs.value[i];
-      if (el && el.offsetTop > maxHistoryHeight) {
-        hasExceeded = true;
-        break;
+      if (el && el.offsetTop > maxHistoryHeight.value) {
+        return true;
       }
     }
   }
-  return hasExceeded;
+  return false;
 });
 
 // 切换显示全部历史记录
@@ -162,6 +150,7 @@ const toggleShowAllHistory = () => {
 
 // 计算可见的历史记录项
 const visibleHistoryItems = computed(() => {
+  if (!maxHistoryHeight.value) return searchHistory.value;
   if (showAllHistory.value) {
     return searchHistory.value;
   }
@@ -170,45 +159,55 @@ const visibleHistoryItems = computed(() => {
   for (let i = 0; i < searchHistory.value.length; i++) {
     const el = historyItemRefs.value[i];
     if (el) {
-      if (el.offsetTop <= maxHistoryHeight) {
+      if (el.offsetTop <= maxHistoryHeight.value) {
         visibleItems.push(searchHistory.value[i]);
       }
     } else {
-      // 如果 el 未绑定，暂时将该项加入可见列表
       visibleItems.push(searchHistory.value[i]);
     }
   }
   return visibleItems;
 });
 
-// 在组件挂载后计算高度
-onMounted(async () => {
-  await nextTick();
-  console.log("Component mounted, initializing refs...");
+// 更新 maxHistoryHeight
+const updateMaxHistoryHeight = () => {
+  let diffCount = 0;
   for (let i = 0; i < historyItemRefs.value.length; i++) {
     const el = historyItemRefs.value[i];
     if (el) {
-      const offsetTop = el.offsetTop;
-      console.log(`Item ${i} offsetTop: ${offsetTop}`);
+      if (!firstOffsetTop) {
+        firstOffsetTop = el.offsetTop;
+      }
+      if (el.offsetTop !== firstOffsetTop) {
+        if (!firstDiffOffsetTop) {
+          firstDiffOffsetTop = el.offsetTop;
+        } else {
+          maxHistoryHeight.value = el.offsetTop;
+          return;
+        }
+        diffCount++;
+      }
     }
   }
-  // 从本地存储中加载搜索历史记录
+  if (diffCount === 1 && firstDiffOffsetTop) {
+    maxHistoryHeight.value = firstDiffOffsetTop;
+  }
+};
+
+// 在组件挂载后计算高度
+onMounted(async () => {
+  await nextTick();
   loadSearchHistoryFromLocalStorage();
+  nextTick(() => {
+    updateMaxHistoryHeight();
+  });
 });
 
 watch(
   searchHistory,
   async () => {
-    console.log("Search history updated:", searchHistory.value);
     await nextTick();
-    console.log("Recalculating refs...");
-    for (let i = 0; i < historyItemRefs.value.length; i++) {
-      const el = historyItemRefs.value[i];
-      if (el) {
-        const offsetTop = el.offsetTop;
-        console.log(`Item ${i} offsetTop: ${offsetTop}`);
-      }
-    }
+    updateMaxHistoryHeight();
   },
   { deep: true }
 );
@@ -258,12 +257,12 @@ watch(
   background: #f5f5f5;
   z-index: 1;
   padding: 10px 0;
-  display: inline-block;
+  display: inline - block;
   width: calc(100% - 40px);
 }
 
 .history-clear {
-  display: inline-block;
+  display: inline - block;
   font-size: 14px;
   color: #999;
   cursor: pointer;
@@ -283,7 +282,7 @@ watch(
 }
 
 .history-item {
-  display: inline-block;
+  display: inline - block;
   padding: 4px 8px;
   background-color: #f0f0f0;
   border-radius: 4px;
@@ -309,7 +308,7 @@ watch(
 }
 
 .isExpand {
-  display: inline-block;
+  display: inline - block;
   padding: 4px 8px;
   background-color: #f0f0f0;
   border-radius: 4px;

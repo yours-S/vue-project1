@@ -16,6 +16,7 @@ declare module 'vue' {
     SearchBtn: typeof import('./src/components/Search/SearchBtn.vue')['default']
     TopicList: typeof import('./src/components/topic/TopicList.vue')['default']
     UserInfo: typeof import('./src/components/user/UserInfo.vue')['default']
+    Van: typeof import('vant/es')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
