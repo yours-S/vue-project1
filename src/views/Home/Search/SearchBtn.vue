@@ -161,6 +161,15 @@ const visibleHistoryItems = computed(() => {
     if (el) {
       if (el.offsetTop <= maxHistoryHeight.value) {
         visibleItems.push(searchHistory.value[i]);
+      } else if (
+        shouldShowExpandButton.value &&
+        i === searchHistory.value.length - 1
+      ) {
+        // 当需要显示展开按钮且是最后一项时，隐藏前一项
+        if (visibleItems.length > 0) {
+          visibleItems.pop();
+        }
+        break;
       }
     } else {
       visibleItems.push(searchHistory.value[i]);
