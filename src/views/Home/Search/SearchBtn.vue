@@ -26,6 +26,7 @@
       <div class="history-list">
         <div
           class="history-item"
+          :class="hidden ? `hidden-item` : ''"
           v-for="(item, index) in visibleHistoryItems"
           :key="index"
           @click="handleHistoryClick(item)"
@@ -61,6 +62,7 @@ const searchHistory = ref<string[]>([]);
 const showAllHistory = ref(false);
 const historyItemRefs = ref<HTMLElement[]>([]);
 const maxHistoryHeight = ref<number | null>(null);
+const hidden = ref(true);
 let firstDiffOffsetTop: number | null = null;
 let firstOffsetTop: number | null = null;
 
@@ -175,6 +177,7 @@ const visibleHistoryItems = computed(() => {
       visibleItems.push(searchHistory.value[i]);
     }
   }
+  hidden.value = false;
   return visibleItems;
 });
 
@@ -301,6 +304,10 @@ watch(
   font-size: 14px;
   cursor: pointer;
   position: relative;
+}
+
+.hidden-item {
+  visibility: hidden;
 }
 
 .delete-icon {
